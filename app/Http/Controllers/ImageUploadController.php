@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use File;
 
 class ImageUploadController extends Controller
 {
@@ -14,7 +15,15 @@ class ImageUploadController extends Controller
      */
     public function image_upload()
     {
-        return view('image_upload');
+        //Getting images
+        $files = Storage::disk('images')->files();
+        $images = array();
+        //echo dd($files);
+        foreach($files as $file) {
+            $images[] = $file;
+        }
+        //var_dump($images);
+        return view('image_upload')->with('images', $images);
     }
 
     /**
@@ -30,9 +39,9 @@ class ImageUploadController extends Controller
 
         $imageName = time().'.'.$request->image->extension();
     
-        $request->image->move(public_path('images'), $imageName);
-        
+        //$request->image->move(public_path('images'), $imageName);
+        Storage::disk('images')->put($imageName, file_get_contents($request->image));
 
-        return 'Success';
+        return back()->with('success', 'Image Uploaded');
     }
 }

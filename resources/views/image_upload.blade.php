@@ -41,6 +41,12 @@
                     </div>
                 </div>
         </form>
+        <br/>
+        @if (!empty($images))
+            @foreach($images as $image)
+                <p><img src={{asset('/storage/images/'.$image)}} width="500px" /></p>
+            @endforeach
+        @endif
     </div>
 </body>
 </html>
